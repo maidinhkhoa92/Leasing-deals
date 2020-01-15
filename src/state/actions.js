@@ -1,0 +1,1 @@
+export { Creators as dealsActions } from './deals/reducers'

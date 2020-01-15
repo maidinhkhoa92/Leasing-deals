@@ -1,1 +1,1 @@
-import { default as deals } from './deals';
+export { default as deals } from './deals';
