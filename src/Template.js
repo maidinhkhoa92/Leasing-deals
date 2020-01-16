@@ -1,7 +1,9 @@
 import React from "react";
 import _ from "lodash";
-import { Table, Image, Container, Row, Col } from "react-bootstrap";
+import { Table, Image, Container, Row, Col, Pagination } from "react-bootstrap";
 import Select from "react-select";
+import { APP_CONFIG } from "configs";
+
 const engine_type = [
   { value: "Diesel", label: "Diesel" },
   { value: "Electric", label: "Electric" },
@@ -38,28 +40,29 @@ const monthly_rental = [
 
 const getValue = (opts, val) => {
   return _.filter(opts, o => _.includes(val, o.value));
-}
+};
 
-export default ({ list, filter, setFilter, setFilterMonthly }) => {
+export default ({ list, filter, setFilter, setFilterMonthly, pageNumber, setPageNumber, totalLength }) => {
+  console.log(list);
   return (
     <Container>
       <Row className="mb-4">
         <Col>
           <h3>Fuel</h3>
-          <Select 
-            isMulti 
-            options={engine_type} 
-            value={getValue(engine_type, filter.engine_type)} 
-            onChange={e => setFilter('engine_type', e)}
+          <Select
+            isMulti
+            options={engine_type}
+            value={getValue(engine_type, filter.engine_type)}
+            onChange={e => setFilter("engine_type", e)}
           />
         </Col>
         <Col>
           <h3>Drive</h3>
-          <Select 
-            isMulti 
-            options={transmission} 
-            value={getValue(transmission, filter.transmission)} 
-            onChange={e => setFilter('transmission', e)}
+          <Select
+            isMulti
+            options={transmission}
+            value={getValue(transmission, filter.transmission)}
+            onChange={e => setFilter("transmission", e)}
           />
         </Col>
         <Col>
@@ -69,16 +72,16 @@ export default ({ list, filter, setFilter, setFilterMonthly }) => {
           <Row>
             <Col>
               <Select
-                options={monthly_rental} 
-                value={filter.monthly_rental.from} 
-                onChange={e => setFilterMonthly('from', e)}
+                options={monthly_rental}
+                value={filter.monthly_rental.from}
+                onChange={e => setFilterMonthly("from", e)}
               />
             </Col>
             <Col>
-              <Select 
-                options={monthly_rental} 
-                value={filter.monthly_rental.to} 
-                onChange={e => setFilterMonthly('to', e)}
+              <Select
+                options={monthly_rental}
+                value={filter.monthly_rental.to}
+                onChange={e => setFilterMonthly("to", e)}
               />
             </Col>
           </Row>
@@ -111,6 +114,21 @@ export default ({ list, filter, setFilter, setFilterMonthly }) => {
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={6}>
+                  <Pagination>
+                    {pageNumber > 1 && <Pagination.Prev onClick={() => setPageNumber(pageNumber-1)} />}
+                    
+                    {
+                      pageNumber * APP_CONFIG.pageSize <= totalLength && (
+                        <Pagination.Next onClick={() => setPageNumber(pageNumber+1)}/>
+                      )
+                    }
+                  </Pagination>
+                </td>
+              </tr>
+            </tfoot>
           </Table>
         </Col>
       </Row>

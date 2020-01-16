@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { dealsActions } from "state/actions";
 import { dealsSelectors } from "state/selectors";
 import Template from "./Template";
+import { APP_CONFIG } from "configs";
 
 const useConnect = () => {
   // mapState
@@ -111,7 +112,27 @@ const App = () => {
     [filter],
   );
 
-  return <Template list={filterList} filter={filter} setFilter={filterArray} setFilterMonthly={setFilterMonthly} />;
+  // pagination handle
+  const [ pageNumber, setPageNumber ] = useState(1);
+
+  const totalLength = useMemo(() => {
+    return list.length
+  }, [list])
+
+  const paginatedList = useMemo(() => {
+    return _.slice(filterList, pageNumber * APP_CONFIG.pageSize, (pageNumber + 1) * APP_CONFIG.pageSize);
+    }, [filterList, pageNumber],
+  )
+
+  return <Template 
+    list={paginatedList}
+    pageNumber={pageNumber}
+    setPageNumber={setPageNumber}
+    totalLength={totalLength} 
+    filter={filter} 
+    setFilter={filterArray} 
+    setFilterMonthly={setFilterMonthly} 
+  />;
 };
 
 export default App;
