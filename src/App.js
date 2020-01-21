@@ -33,6 +33,8 @@ const App = () => {
   // Connect redux
   const { list, fetch } = useConnect();
 
+  const [ pageNumber, setPageNumber ] = useState(0);
+
   // Fetch list
   useEffect(() => {
     const params = {
@@ -54,6 +56,7 @@ const App = () => {
   });
 
   const filterList = useMemo(() => {
+    setPageNumber(0)
     const { engine_type, transmission, monthly_rental } = filter
     return _.filter(list, item => {
       let passed = false
@@ -84,11 +87,15 @@ const App = () => {
       } else {
         return;
       }
-
-      return passed && item;
+      if(item._id === "5df9b745a780885ff6e0043d") {
+        console.log(item, passed)
+      }
+      if(passed) {
+        return item;
+      }
+      
     });
   }, [list, filter]);
-
   const filterArray = useCallback(
     (key, values) => {
       setFilter({
@@ -113,11 +120,10 @@ const App = () => {
   );
 
   // pagination handle
-  const [ pageNumber, setPageNumber ] = useState(1);
 
   const totalLength = useMemo(() => {
-    return list.length
-  }, [list])
+    return filterList.length
+  }, [filterList])
 
   const paginatedList = useMemo(() => {
     return _.slice(filterList, pageNumber * APP_CONFIG.pageSize, (pageNumber + 1) * APP_CONFIG.pageSize);

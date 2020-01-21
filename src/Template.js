@@ -43,7 +43,6 @@ const getValue = (opts, val) => {
 };
 
 export default ({ list, filter, setFilter, setFilterMonthly, pageNumber, setPageNumber, totalLength }) => {
-  console.log(list);
   return (
     <Container>
       <Row className="mb-4">
@@ -118,10 +117,10 @@ export default ({ list, filter, setFilter, setFilterMonthly, pageNumber, setPage
               <tr>
                 <td colSpan={6}>
                   <Pagination>
-                    {pageNumber > 1 && <Pagination.Prev onClick={() => setPageNumber(pageNumber-1)} />}
+                    {pageNumber > 0 && <Pagination.Prev onClick={() => setPageNumber(pageNumber-1)} />}
                     
                     {
-                      pageNumber * APP_CONFIG.pageSize <= totalLength && (
+                      (APP_CONFIG.pageSize * pageNumber) + 20 <= totalLength && (
                         <Pagination.Next onClick={() => setPageNumber(pageNumber+1)}/>
                       )
                     }
