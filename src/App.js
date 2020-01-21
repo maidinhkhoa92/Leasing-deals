@@ -87,13 +87,8 @@ const App = () => {
       } else {
         return;
       }
-      if(item._id === "5df9b745a780885ff6e0043d") {
-        console.log(item, passed)
-      }
-      if(passed) {
-        return item;
-      }
       
+      return passed && item;
     });
   }, [list, filter]);
   const filterArray = useCallback(
